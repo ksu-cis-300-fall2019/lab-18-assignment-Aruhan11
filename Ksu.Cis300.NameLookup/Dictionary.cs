@@ -141,21 +141,15 @@ namespace Ksu.Cis300.NameLookup
 
         private static BinaryTreeNode<KeyValuePair<TKey, TValue>> RemoveMininumKey(BinaryTreeNode<KeyValuePair<TKey, TValue>> t, out KeyValuePair<TKey, TValue> min)
         {
-            
-
             if (t.LeftChild == null)
             {
                 min = t.Data;
-                return t.RightChild;
-                
+                return t.RightChild;       
             }
             else
-            {
-
+            { 
                 BinaryTreeNode<KeyValuePair<TKey, TValue>> recurisive = RemoveMininumKey(t.LeftChild, out min);
-               
                 BinaryTreeNode<KeyValuePair<TKey, TValue>> result = new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data,recurisive,t.RightChild);
-
                 return result;
 
             } 
@@ -169,7 +163,6 @@ namespace Ksu.Cis300.NameLookup
 
             if (t == null)
             {
-
                 removed = false;
                 return t; 
             }
@@ -182,24 +175,25 @@ namespace Ksu.Cis300.NameLookup
                     if (t.LeftChild == null)
                     {
                         return t.RightChild;
-
                     }
-                    if (t.RightChild == null)
+                    else if (t.RightChild == null)
                     {
                         return t.LeftChild;
                     }
-                    if (t.LeftChild == null && t.RightChild == null)
+                    else
                     {
-                        RemoveMininumKey(t, out min);
-                        BinaryTreeNode<KeyValuePair<TKey, TValue>> recurisive = Remove(key, t.LeftChild, out removed);
-                        BinaryTreeNode<KeyValuePair<TKey, TValue>> result = new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data, recurisive, t.RightChild);
-                        return result;
+                        BinaryTreeNode<KeyValuePair<TKey, TValue>> newRight = RemoveMininumKey(t.RightChild, out min);
+                        return new BinaryTreeNode<KeyValuePair<TKey, TValue>>(min, t.LeftChild, newRight);
                     }
                 }
-                
-                
-               
-
+                else if (compare < 0)
+                {
+                    return new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data, Remove(key, t.LeftChild, out removed), t.RightChild);
+                }
+                else
+                {
+                    return new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data, t.LeftChild, Remove(key, t.RightChild, out removed));
+                }
             }
         }
 
